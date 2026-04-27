@@ -1,0 +1,2952 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scrum Dashboard — Web Blog Perusahaan | CI4 + Shield + AdminLTE3</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,700;1,300&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --surface3: #1e2330;
+      --border: #252b38;
+      --border2: #2e3548;
+      --accent: #4f8ef7;
+      --accent2: #7c5cfc;
+      --accent3: #26c99e;
+      --accent4: #f0a844;
+      --accent5: #f05c5c;
+      --accent6: #5ce0f0;
+      --text: #e8ecf4;
+      --text2: #9aa3b8;
+      --text3: #5c6478;
+      --done: #26c99e;
+      --inprog: #4f8ef7;
+      --todo: #9aa3b8;
+      --blocked: #f05c5c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: rgba(10, 12, 16, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .nav-logo .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+      overflow-x: auto;
+    }
+
+    .nav-tabs li a {
+      display: block;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--text2);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .nav-tabs li a:hover,
+    .nav-tabs li a.active {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .nav-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      margin-top: 60px;
+      padding: 64px 40px 48px;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 60%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(79, 142, 247, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      color: var(--text2);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+
+    .pill {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: 1px solid;
+    }
+
+    .pill-blue {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(79, 142, 247, 0.08);
+    }
+
+    .pill-purple {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background: rgba(124, 92, 252, 0.08);
+    }
+
+    .pill-green {
+      border-color: var(--accent3);
+      color: var(--accent3);
+      background: rgba(38, 201, 158, 0.08);
+    }
+
+    .pill-orange {
+      border-color: var(--accent4);
+      color: var(--accent4);
+      background: rgba(240, 168, 68, 0.08);
+    }
+
+    .pill-red {
+      border-color: var(--accent5);
+      color: var(--accent5);
+      background: rgba(240, 92, 92, 0.08);
+    }
+
+    .pill-cyan {
+      border-color: var(--accent6);
+      color: var(--accent6);
+      background: rgba(92, 224, 240, 0.08);
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .stat-card .val {
+      font-family: 'Fraunces', serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-card .lbl {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 48px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section:last-child {
+      border-bottom: none;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text3);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .section h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .section h2 .hi {
+      color: var(--accent);
+    }
+
+    .section-desc {
+      color: var(--text2);
+      font-size: 13px;
+      max-width: 700px;
+      margin-bottom: 24px;
+    }
+
+    /* ── GRID CARDS ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .card:hover {
+      border-color: var(--border2);
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .card-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--surface3);
+      color: var(--text2);
+    }
+
+    /* ── TEAM ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .team-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      text-align: center;
+      transition: border-color .2s;
+    }
+
+    .team-card:hover {
+      border-color: var(--accent);
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin: 0 auto 12px;
+      font-weight: 700;
+    }
+
+    .team-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .team-role {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .team-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .skill-chip {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: var(--surface3);
+      color: var(--text2);
+    }
+
+    /* ── EPICS ── */
+    .epic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .epic-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .epic-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .epic-header:hover {
+      background: var(--surface3);
+    }
+
+    .epic-color {
+      width: 4px;
+      height: 32px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .epic-title {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .epic-sp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text2);
+      background: var(--surface3);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .epic-toggle {
+      color: var(--text3);
+      font-size: 12px;
+      transition: transform .2s;
+    }
+
+    .epic-toggle.open {
+      transform: rotate(90deg);
+    }
+
+    .epic-body {
+      display: none;
+      padding: 0 18px 14px 36px;
+    }
+
+    .epic-body.open {
+      display: block;
+    }
+
+    .story-list {
+      list-style: none;
+    }
+
+    .story-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .story-item:last-child {
+      border-bottom: none;
+    }
+
+    .story-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      background: var(--surface3);
+      padding: 2px 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .story-text {
+      font-size: 12px;
+      flex: 1;
+    }
+
+    .story-sp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .sp-1 {
+      background: rgba(38, 201, 158, .15);
+      color: var(--accent3);
+    }
+
+    .sp-2 {
+      background: rgba(79, 142, 247, .15);
+      color: var(--accent);
+    }
+
+    .sp-3 {
+      background: rgba(124, 92, 252, .15);
+      color: var(--accent2);
+    }
+
+    .sp-5 {
+      background: rgba(240, 168, 68, .15);
+      color: var(--accent4);
+    }
+
+    .sp-8 {
+      background: rgba(240, 92, 92, .15);
+      color: var(--accent5);
+    }
+
+    /* ── SPRINT FLOW ── */
+    .flow-track {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .flow-step {
+      padding: 20px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+
+    .flow-step:last-child {
+      border-right: none;
+    }
+
+    .flow-step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      margin-bottom: 6px;
+    }
+
+    .flow-step-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .flow-step-desc {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .flow-arrow {
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--text2);
+      z-index: 1;
+    }
+
+    /* ── SPRINTS ── */
+    .sprint-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+    }
+
+    .sprint-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .sprint-head {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .sprint-head:hover {
+      background: var(--surface3);
+    }
+
+    .sprint-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .sprint-info {
+      flex: 1;
+    }
+
+    .sprint-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .sprint-date {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .sprint-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sprint-sp-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .sprint-status {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .status-done {
+      background: rgba(38, 201, 158, .15);
+      color: var(--accent3);
+    }
+
+    .status-active {
+      background: rgba(79, 142, 247, .15);
+      color: var(--accent);
+    }
+
+    .status-planned {
+      background: rgba(92, 100, 120, .15);
+      color: var(--text3);
+    }
+
+    .sprint-body {
+      padding: 0 16px 14px;
+      display: none;
+    }
+
+    .sprint-body.open {
+      display: block;
+    }
+
+    .sprint-stories {
+      list-style: none;
+    }
+
+    .sprint-story {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sprint-story:last-child {
+      border-bottom: none;
+    }
+
+    .story-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-done {
+      background: var(--done);
+    }
+
+    .dot-inprog {
+      background: var(--inprog);
+    }
+
+    .dot-todo {
+      background: var(--text3);
+    }
+
+    /* ── CEREMONIES ── */
+    .ceremony-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .ceremony-timeline::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .ceremony-item {
+      display: flex;
+      gap: 20px;
+      padding-bottom: 28px;
+      position: relative;
+    }
+
+    .ceremony-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .ceremony-dot {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      border: 2px solid var(--border);
+      background: var(--surface2);
+      z-index: 1;
+    }
+
+    .ceremony-content {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+
+    .ceremony-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .ceremony-meta {
+      font-size: 11px;
+      color: var(--text3);
+      margin-bottom: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .ceremony-desc {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .ceremony-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .ctag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: var(--surface3);
+      color: var(--text2);
+    }
+
+    /* ── ARTIFACTS ── */
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .artifact-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      transition: border-color .2s;
+    }
+
+    .artifact-card:hover {
+      border-color: var(--border2);
+    }
+
+    .artifact-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .artifact-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .artifact-desc {
+      font-size: 12px;
+      color: var(--text2);
+      margin-bottom: 14px;
+    }
+
+    .artifact-items {
+      list-style: none;
+    }
+
+    .artifact-items li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .artifact-items li:last-child {
+      border-bottom: none;
+    }
+
+    .artifact-items li::before {
+      content: '—';
+      color: var(--text3);
+    }
+
+    /* ── KANBAN ── */
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .kanban-col {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .kanban-head {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .kanban-col-title {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .kanban-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text3);
+      background: var(--surface3);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .kanban-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .kanban-item {
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 12px;
+    }
+
+    .kanban-item-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--text3);
+      margin-bottom: 4px;
+    }
+
+    .kanban-item-title {
+      font-size: 12px;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .kanban-item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .assignee {
+      font-size: 10px;
+      color: var(--text3);
+    }
+
+    .kanban-sp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .col-todo .kanban-head {
+      border-top: 3px solid var(--text3);
+    }
+
+    .col-inprog .kanban-head {
+      border-top: 3px solid var(--accent);
+    }
+
+    .col-review .kanban-head {
+      border-top: 3px solid var(--accent4);
+    }
+
+    .col-done .kanban-head {
+      border-top: 3px solid var(--accent3);
+    }
+
+    /* ── DOD ── */
+    .dod-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .dod-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: border-color .2s;
+      user-select: none;
+    }
+
+    .dod-item:hover {
+      border-color: var(--border2);
+    }
+
+    .dod-item.checked {
+      border-color: rgba(38, 201, 158, .3);
+      background: rgba(38, 201, 158, .05);
+    }
+
+    .dod-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 2px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      transition: all .15s;
+    }
+
+    .dod-item.checked .dod-check {
+      background: var(--accent3);
+      border-color: var(--accent3);
+      color: #fff;
+    }
+
+    .dod-text {
+      font-size: 12px;
+    }
+
+    .dod-item.checked .dod-text {
+      text-decoration: line-through;
+      color: var(--text3);
+    }
+
+    /* ── RISK ── */
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .risk-table th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: var(--text3);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .risk-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      background: var(--surface);
+    }
+
+    .risk-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .risk-level {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .risk-high {
+      background: rgba(240, 92, 92, .15);
+      color: var(--accent5);
+    }
+
+    .risk-med {
+      background: rgba(240, 168, 68, .15);
+      color: var(--accent4);
+    }
+
+    .risk-low {
+      background: rgba(38, 201, 158, .15);
+      color: var(--accent3);
+    }
+
+    /* ── VELOCITY ── */
+    .velocity-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 120px;
+      margin-bottom: 8px;
+    }
+
+    .vel-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vel-bar {
+      width: 100%;
+      border-radius: 4px 4px 0 0;
+      transition: height .5s ease;
+      position: relative;
+    }
+
+    .vel-bar-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text2);
+    }
+
+    .vel-label {
+      font-size: 9px;
+      color: var(--text3);
+    }
+
+    .vel-target {
+      position: relative;
+      border-top: 2px dashed rgba(79, 142, 247, 0.4);
+      margin-bottom: 4px;
+    }
+
+    .vel-target-label {
+      position: absolute;
+      right: 0;
+      top: -18px;
+      font-size: 9px;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── BURNDOWN ── */
+    .burndown-wrap {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .bd-chart {
+      position: relative;
+      height: 160px;
+      margin: 16px 0 8px;
+    }
+
+    .bd-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .bd-legend {
+      display: flex;
+      gap: 20px;
+    }
+
+    .bd-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .bd-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    /* ── TECH STACK ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .tech-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tech-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .tech-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .tech-sub {
+      font-size: 10px;
+      color: var(--text2);
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .roadmap-phase {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .roadmap-phase-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .roadmap-phase-head:hover {
+      background: var(--surface3);
+    }
+
+    .roadmap-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .roadmap-phase-title {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .roadmap-duration {
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .roadmap-body {
+      display: none;
+      padding: 0 18px 14px 60px;
+    }
+
+    .roadmap-body.open {
+      display: block;
+    }
+
+    .roadmap-deliverables {
+      list-style: none;
+    }
+
+    .roadmap-deliverables li {
+      font-size: 12px;
+      color: var(--text2);
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .roadmap-deliverables li:last-child {
+      border-bottom: none;
+    }
+
+    .roadmap-deliverables li::before {
+      content: '→';
+      color: var(--text3);
+    }
+
+    /* ── MODULE TABLE ── */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .module-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+
+    .module-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text3);
+      margin-bottom: 6px;
+    }
+
+    .module-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .module-features {
+      list-style: none;
+    }
+
+    .module-features li {
+      font-size: 11px;
+      color: var(--text2);
+      padding: 3px 0;
+      display: flex;
+      gap: 6px;
+    }
+
+    .module-features li::before {
+      content: '·';
+      color: var(--text3);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 28px 40px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text3);
+      border-top: 1px solid var(--border);
+    }
+
+    footer strong {
+      color: var(--text2);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .section {
+        padding: 36px 20px;
+      }
+
+      .hero {
+        padding: 48px 20px 36px;
+      }
+
+      .kanban {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      nav {
+        padding: 0 16px;
+      }
+
+      .nav-tabs {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kanban {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <span class="dot"></span>
+      Blog CI4 — Scrum
+    </div>
+    <ul class="nav-tabs">
+      <li><a href="#overview" class="active">Overview</a></li>
+      <li><a href="#team">Tim</a></li>
+      <li><a href="#techstack">Tech Stack</a></li>
+      <li><a href="#modules">Modul</a></li>
+      <li><a href="#backlog">Backlog</a></li>
+      <li><a href="#flow">Scrum Flow</a></li>
+      <li><a href="#ceremonies">Ceremonies</a></li>
+      <li><a href="#artifacts">Artifacts</a></li>
+      <li><a href="#sprints">Sprints</a></li>
+      <li><a href="#kanban">Sprint Board</a></li>
+      <li><a href="#dod">DoD</a></li>
+      <li><a href="#velocity">Velocity</a></li>
+      <li><a href="#risk">Risk</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero" id="overview">
+    <div class="hero-label">// Scrum Documentation — v1.0</div>
+    <h1>Web Blog <em>Perusahaan</em><br>Berbasis CodeIgniter 4</h1>
+    <div class="hero-sub">CI4 · Shield · AdminLTE3 · MySQL · REST API · Scrum Framework</div>
+    <div class="hero-pills">
+      <span class="pill pill-blue">CodeIgniter 4</span>
+      <span class="pill pill-purple">CI Shield Auth</span>
+      <span class="pill pill-green">AdminLTE 3</span>
+      <span class="pill pill-orange">MySQL 8</span>
+      <span class="pill pill-cyan">REST API</span>
+      <span class="pill pill-red">Scrum</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="val" style="color:var(--accent)">8</div>
+        <div class="lbl">Sprint (16 Minggu)</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" style="color:var(--accent2)">35</div>
+        <div class="lbl">User Stories</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" style="color:var(--accent3)">148</div>
+        <div class="lbl">Story Points</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" style="color:var(--accent4)">6</div>
+        <div class="lbl">Epics</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" style="color:var(--accent5)">6</div>
+        <div class="lbl">Scrum Member</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" style="color:var(--accent6)">10</div>
+        <div class="lbl">Modul Sistem</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRUM TEAM -->
+  <div class="section" id="team">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Scrum <span class="hi">Team</span></h2>
+    </div>
+    <p class="section-desc">Tim terdiri dari 6 anggota dengan peran Scrum yang jelas. Product Owner menetapkan visi
+      produk, Scrum Master memfasilitasi proses, dan Development Team mengeksekusi deliverable.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar" style="background:rgba(240,168,68,.12);color:var(--accent4)">👑</div>
+        <div class="team-name">Yulef Dian, S.T., M.Kom.</div>
+        <div class="team-role">Product Owner</div>
+        <div class="team-skills">
+          <span class="skill-chip">Product Vision</span>
+          <span class="skill-chip">Backlog Mgmt</span>
+          <span class="skill-chip">Stakeholder</span>
+          <span class="skill-chip">Acceptance</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:rgba(79,142,247,.12);color:var(--accent)">🧭</div>
+        <div class="team-name">Rendi Syahputra</div>
+        <div class="team-role">Scrum Master</div>
+        <div class="team-skills">
+          <span class="skill-chip">Facilitation</span>
+          <span class="skill-chip">Impediment</span>
+          <span class="skill-chip">Coaching</span>
+          <span class="skill-chip">Reporting</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:rgba(124,92,252,.12);color:var(--accent2)">🎨</div>
+        <div class="team-name">Ahmad Firmansyah</div>
+        <div class="team-role">UI/UX Designer</div>
+        <div class="team-skills">
+          <span class="skill-chip">Figma</span>
+          <span class="skill-chip">Wireframe</span>
+          <span class="skill-chip">AdminLTE3</span>
+          <span class="skill-chip">Responsive</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:rgba(38,201,158,.12);color:var(--accent3)">💻</div>
+        <div class="team-name">Rafi Dzakwan Maulana</div>
+        <div class="team-role">Frontend Developer</div>
+        <div class="team-skills">
+          <span class="skill-chip">HTML/CSS</span>
+          <span class="skill-chip">JavaScript</span>
+          <span class="skill-chip">Bootstrap</span>
+          <span class="skill-chip">jQuery</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:rgba(92,224,240,.12);color:var(--accent6)">⚙️</div>
+        <div class="team-name">Raafi Rifani</div>
+        <div class="team-role">Backend Developer</div>
+        <div class="team-skills">
+          <span class="skill-chip">CI4</span>
+          <span class="skill-chip">CI Shield</span>
+          <span class="skill-chip">MySQL</span>
+          <span class="skill-chip">REST API</span>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="avatar" style="background:rgba(240,92,92,.12);color:var(--accent5)">🔍</div>
+        <div class="team-name">Dimas Setiawan</div>
+        <div class="team-role">QA / Backend Dev</div>
+        <div class="team-skills">
+          <span class="skill-chip">Testing</span>
+          <span class="skill-chip">CI4</span>
+          <span class="skill-chip">PHPUnit</span>
+          <span class="skill-chip">Postman</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="section" id="techstack">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Tech <span class="hi">Stack</span></h2>
+    </div>
+    <p class="section-desc">Tumpukan teknologi yang digunakan dalam pengembangan Web Blog Perusahaan, mulai dari backend
+      framework hingga deployment environment.</p>
+    <div class="tech-grid">
+      <div class="tech-item">
+        <div class="tech-icon">🔥</div>
+        <div>
+          <div class="tech-name">CodeIgniter 4</div>
+          <div class="tech-sub">Backend MVC Framework</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🛡️</div>
+        <div>
+          <div class="tech-name">CI Shield</div>
+          <div class="tech-sub">Auth & Authorization</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🎨</div>
+        <div>
+          <div class="tech-name">AdminLTE 3</div>
+          <div class="tech-sub">Admin Dashboard Template</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🗄️</div>
+        <div>
+          <div class="tech-name">MySQL 8.0</div>
+          <div class="tech-sub">Relational Database</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">⚡</div>
+        <div>
+          <div class="tech-name">Bootstrap 4</div>
+          <div class="tech-sub">CSS Framework</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">📜</div>
+        <div>
+          <div class="tech-name">jQuery 3</div>
+          <div class="tech-sub">DOM & Ajax</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🔌</div>
+        <div>
+          <div class="tech-name">REST API</div>
+          <div class="tech-sub">JSON Endpoint</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">📦</div>
+        <div>
+          <div class="tech-name">Composer</div>
+          <div class="tech-sub">PHP Dependency Manager</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🔧</div>
+        <div>
+          <div class="tech-name">PHPUnit</div>
+          <div class="tech-sub">Unit Testing</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🌐</div>
+        <div>
+          <div class="tech-name">Apache / Nginx</div>
+          <div class="tech-sub">Web Server</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🗂️</div>
+        <div>
+          <div class="tech-name">Git / GitHub</div>
+          <div class="tech-sub">Version Control</div>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🐳</div>
+        <div>
+          <div class="tech-name">Docker (Opsional)</div>
+          <div class="tech-sub">Containerization</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULES -->
+  <div class="section" id="modules">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Modul <span class="hi">Sistem</span></h2>
+    </div>
+    <p class="section-desc">10 modul utama yang membangun Web Blog Perusahaan dengan fitur lengkap untuk manajemen
+      konten, pengguna, dan SEO.</p>
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="module-num">M-01</div>
+        <div class="module-name">🔐 Authentication & Authorization</div>
+        <ul class="module-features">
+          <li>Login / Logout (CI Shield)</li>
+          <li>Register & Email Verification</li>
+          <li>Forgot / Reset Password</li>
+          <li>Remember Me & Session</li>
+          <li>Role-Based Access Control</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-02</div>
+        <div class="module-name">👤 User Management</div>
+        <ul class="module-features">
+          <li>CRUD User</li>
+          <li>Role: Admin, Editor, Author, Viewer</li>
+          <li>Avatar & Profile</li>
+          <li>Aktivasi / Nonaktif User</li>
+          <li>Activity Log</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-03</div>
+        <div class="module-name">📝 Manajemen Artikel / Post</div>
+        <ul class="module-features">
+          <li>CRUD Artikel (TinyMCE / Quill)</li>
+          <li>Draft, Publish, Scheduled</li>
+          <li>Thumbnail Upload</li>
+          <li>Slug Auto-Generate</li>
+          <li>Revisi Artikel</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-04</div>
+        <div class="module-name">🗂️ Kategori & Tag</div>
+        <ul class="module-features">
+          <li>CRUD Kategori Bersarang</li>
+          <li>Manajemen Tag</li>
+          <li>Relasi Artikel-Kategori</li>
+          <li>Halaman Arsip per Kategori</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-05</div>
+        <div class="module-name">💬 Komentar</div>
+        <ul class="module-features">
+          <li>Komentar Publik & Tamu</li>
+          <li>Moderasi & Spam Filter</li>
+          <li>Balasan Bersarang (Nested)</li>
+          <li>Notifikasi Email</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-06</div>
+        <div class="module-name">📁 Media Manager</div>
+        <ul class="module-features">
+          <li>Upload Gambar & File</li>
+          <li>Resize & Compress Otomatis</li>
+          <li>Galeri Media</li>
+          <li>Delete & Rename File</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-07</div>
+        <div class="module-name">🔍 SEO Manager</div>
+        <ul class="module-features">
+          <li>Meta Title & Description</li>
+          <li>Open Graph & Twitter Card</li>
+          <li>Sitemap XML Otomatis</li>
+          <li>Robots.txt Editor</li>
+          <li>Canonical URL</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-08</div>
+        <div class="module-name">⚙️ Pengaturan Sistem</div>
+        <ul class="module-features">
+          <li>Info Perusahaan</li>
+          <li>Konfigurasi SMTP Email</li>
+          <li>Tema & Branding</li>
+          <li>Maintenance Mode</li>
+          <li>Backup Database</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-09</div>
+        <div class="module-name">📊 Dashboard & Statistik</div>
+        <ul class="module-features">
+          <li>Ringkasan Total Post & User</li>
+          <li>Grafik Kunjungan (Chart.js)</li>
+          <li>Post Terpopuler</li>
+          <li>Komentar Terbaru</li>
+        </ul>
+      </div>
+      <div class="module-card">
+        <div class="module-num">M-10</div>
+        <div class="module-name">🌐 Frontend (Public Blog)</div>
+        <ul class="module-features">
+          <li>Homepage & Listing Artikel</li>
+          <li>Detail Artikel & Komentar</li>
+          <li>Search & Filter</li>
+          <li>Halaman Statis (About, Contact)</li>
+          <li>Responsive & SEO-Friendly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT BACKLOG -->
+  <div class="section" id="backlog">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Product <span class="hi">Backlog</span></h2>
+    </div>
+    <p class="section-desc">35 User Stories dikelompokkan dalam 6 Epic. Estimasi menggunakan Planning Poker dengan skala
+      Fibonacci (1, 2, 3, 5, 8, 13). Target velocity: 18–22 SP/sprint.</p>
+
+    <div class="epic-list">
+      <!-- EPIC 1 -->
+      <div class="epic-item">
+        <div class="epic-header" onclick="toggleEpic(this)">
+          <div class="epic-color" style="background:var(--accent5)"></div>
+          <div class="epic-title">🔐 EPIC-01 · Authentication & Access Control</div>
+          <div class="epic-sp">21 SP</div>
+          <div class="epic-toggle">▶</div>
+        </div>
+        <div class="epic-body">
+          <ul class="story-list">
+            <li class="story-item"><span class="story-id">US-001</span><span class="story-text">Sebagai pengguna, saya
+                ingin login dengan email & password agar bisa mengakses dashboard</span><span class="story-sp sp-3">3
+                SP</span></li>
+            <li class="story-item"><span class="story-id">US-002</span><span class="story-text">Sebagai admin, saya
+                ingin mendaftarkan user baru dengan verifikasi email</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-003</span><span class="story-text">Sebagai pengguna, saya
+                ingin reset password via link email jika lupa</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-004</span><span class="story-text">Sebagai admin, saya
+                ingin mengatur role user (Admin, Editor, Author, Viewer)</span><span class="story-sp sp-5">5 SP</span>
+            </li>
+            <li class="story-item"><span class="story-id">US-005</span><span class="story-text">Sebagai sistem, saya
+                ingin memproteksi route berdasarkan permission CI Shield</span><span class="story-sp sp-5">5 SP</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- EPIC 2 -->
+      <div class="epic-item">
+        <div class="epic-header" onclick="toggleEpic(this)">
+          <div class="epic-color" style="background:var(--accent)"></div>
+          <div class="epic-title">📝 EPIC-02 · Manajemen Konten (Artikel & Kategori)</div>
+          <div class="epic-sp">42 SP</div>
+          <div class="epic-toggle">▶</div>
+        </div>
+        <div class="epic-body">
+          <ul class="story-list">
+            <li class="story-item"><span class="story-id">US-006</span><span class="story-text">Sebagai Author, saya
+                ingin membuat artikel baru dengan rich text editor</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-007</span><span class="story-text">Sebagai Author, saya
+                ingin menyimpan artikel sebagai Draft sebelum dipublish</span><span class="story-sp sp-3">3 SP</span>
+            </li>
+            <li class="story-item"><span class="story-id">US-008</span><span class="story-text">Sebagai Editor, saya
+                ingin mengedit & mempublish artikel dari semua author</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-009</span><span class="story-text">Sebagai Author, saya
+                ingin menjadwalkan publish artikel pada waktu tertentu</span><span class="story-sp sp-8">8 SP</span>
+            </li>
+            <li class="story-item"><span class="story-id">US-010</span><span class="story-text">Sebagai Admin, saya
+                ingin membuat & mengelola kategori bersarang (parent-child)</span><span class="story-sp sp-5">5
+                SP</span></li>
+            <li class="story-item"><span class="story-id">US-011</span><span class="story-text">Sebagai Author, saya
+                ingin menambahkan tag ke artikel dengan autocomplete</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-012</span><span class="story-text">Sebagai Author, saya
+                ingin upload thumbnail artikel dengan resize otomatis</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-013</span><span class="story-text">Sebagai Editor, saya
+                ingin melihat riwayat revisi artikel</span><span class="story-sp sp-8">8 SP</span></li>
+          </ul>
+        </div>
+      </div>
+      <!-- EPIC 3 -->
+      <div class="epic-item">
+        <div class="epic-header" onclick="toggleEpic(this)">
+          <div class="epic-color" style="background:var(--accent3)"></div>
+          <div class="epic-title">🌐 EPIC-03 · Frontend Public Blog</div>
+          <div class="epic-sp">30 SP</div>
+          <div class="epic-toggle">▶</div>
+        </div>
+        <div class="epic-body">
+          <ul class="story-list">
+            <li class="story-item"><span class="story-id">US-014</span><span class="story-text">Sebagai pengunjung, saya
+                ingin melihat daftar artikel terbaru di homepage</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-015</span><span class="story-text">Sebagai pengunjung, saya
+                ingin membaca detail artikel dengan layout yang nyaman</span><span class="story-sp sp-5">5 SP</span>
+            </li>
+            <li class="story-item"><span class="story-id">US-016</span><span class="story-text">Sebagai pengunjung, saya
+                ingin mencari artikel berdasarkan kata kunci</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-017</span><span class="story-text">Sebagai pengunjung, saya
+                ingin memfilter artikel per kategori & tag</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-018</span><span class="story-text">Sebagai pengunjung, saya
+                ingin melihat halaman About & Contact perusahaan</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-019</span><span class="story-text">Sebagai pengunjung, saya
+                ingin website tampil responsif di mobile/tablet</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-020</span><span class="story-text">Sebagai pengunjung, saya
+                ingin berlangganan newsletter via email</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-021</span><span class="story-text">Sebagai pengunjung, saya
+                ingin melihat artikel terkait di sidebar</span><span class="story-sp sp-2">2 SP</span></li>
+          </ul>
+        </div>
+      </div>
+      <!-- EPIC 4 -->
+      <div class="epic-item">
+        <div class="epic-header" onclick="toggleEpic(this)">
+          <div class="epic-color" style="background:var(--accent4)"></div>
+          <div class="epic-title">💬 EPIC-04 · Komentar & Interaksi</div>
+          <div class="epic-sp">21 SP</div>
+          <div class="epic-toggle">▶</div>
+        </div>
+        <div class="epic-body">
+          <ul class="story-list">
+            <li class="story-item"><span class="story-id">US-022</span><span class="story-text">Sebagai pengunjung, saya
+                ingin mengirim komentar pada artikel (tanpa login)</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-023</span><span class="story-text">Sebagai Admin, saya
+                ingin memoderasi komentar (approve/reject/spam)</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-024</span><span class="story-text">Sebagai pengunjung, saya
+                ingin membalas komentar secara nested</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-025</span><span class="story-text">Sebagai Admin, saya
+                ingin mendapatkan notifikasi email komentar baru</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-026</span><span class="story-text">Sebagai sistem, saya
+                ingin memblokir komentar spam dengan filter kata</span><span class="story-sp sp-3">3 SP</span></li>
+          </ul>
+        </div>
+      </div>
+      <!-- EPIC 5 -->
+      <div class="epic-item">
+        <div class="epic-header" onclick="toggleEpic(this)">
+          <div class="epic-color" style="background:var(--accent2)"></div>
+          <div class="epic-title">🔍 EPIC-05 · SEO, Media & Pengaturan</div>
+          <div class="epic-sp">24 SP</div>
+          <div class="epic-toggle">▶</div>
+        </div>
+        <div class="epic-body">
+          <ul class="story-list">
+            <li class="story-item"><span class="story-id">US-027</span><span class="story-text">Sebagai Admin, saya
+                ingin mengatur meta title & description per artikel</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-028</span><span class="story-text">Sebagai sistem, saya
+                ingin generate sitemap.xml otomatis tiap ada artikel baru</span><span class="story-sp sp-5">5 SP</span>
+            </li>
+            <li class="story-item"><span class="story-id">US-029</span><span class="story-text">Sebagai Author, saya
+                ingin upload & mengelola file media di Media Manager</span><span class="story-sp sp-5">5 SP</span></li>
+            <li class="story-item"><span class="story-id">US-030</span><span class="story-text">Sebagai Admin, saya
+                ingin mengatur informasi perusahaan & konfigurasi SMTP</span><span class="story-sp sp-5">5 SP</span>
+            </li>
+            <li class="story-item"><span class="story-id">US-031</span><span class="story-text">Sebagai Admin, saya
+                ingin mengaktifkan maintenance mode saat update</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-032</span><span class="story-text">Sebagai Admin, saya
+                ingin mengunduh backup database</span><span class="story-sp sp-3">3 SP</span></li>
+          </ul>
+        </div>
+      </div>
+      <!-- EPIC 6 -->
+      <div class="epic-item">
+        <div class="epic-header" onclick="toggleEpic(this)">
+          <div class="epic-color" style="background:var(--accent6)"></div>
+          <div class="epic-title">📊 EPIC-06 · Dashboard, Statistik & API</div>
+          <div class="epic-sp">10 SP</div>
+          <div class="epic-toggle">▶</div>
+        </div>
+        <div class="epic-body">
+          <ul class="story-list">
+            <li class="story-item"><span class="story-id">US-033</span><span class="story-text">Sebagai Admin, saya
+                ingin melihat dashboard ringkasan statistik blog</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-034</span><span class="story-text">Sebagai Admin, saya
+                ingin melihat grafik jumlah artikel per bulan</span><span class="story-sp sp-3">3 SP</span></li>
+            <li class="story-item"><span class="story-id">US-035</span><span class="story-text">Sebagai Developer, saya
+                ingin mengakses REST API publik untuk daftar artikel</span><span class="story-sp sp-5">5 SP</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRUM FLOW -->
+  <div class="section" id="flow">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Scrum Development <span class="hi">Flow</span></h2>
+    </div>
+    <p class="section-desc">Alur kerja Scrum lengkap dari Product Backlog hingga Increment. Setiap sprint berlangsung 2
+      minggu dengan velocity target 18–22 SP.</p>
+
+    <div class="flow-track">
+      <div class="flow-step">
+        <div class="flow-step-num">01</div>
+        <div class="flow-step-title">📋 Product Backlog Refinement</div>
+        <div class="flow-step-desc">PO menyusun & memprioritaskan backlog. Tim melakukan estimasi Planning Poker.</div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">02</div>
+        <div class="flow-step-title">🗓️ Sprint Planning</div>
+        <div class="flow-step-desc">Pilih stories dari backlog. Buat Sprint Goal. Breakdown ke tasks. Komitmen sprint.
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">03</div>
+        <div class="flow-step-title">⚡ Sprint Execution</div>
+        <div class="flow-step-desc">Dev team develop & test. Daily Scrum tiap pagi. Update Sprint Board Kanban.</div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">04</div>
+        <div class="flow-step-title">🔍 Sprint Review</div>
+        <div class="flow-step-desc">Demo increment ke PO & stakeholder. PO memberikan feedback & acceptance.</div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">05</div>
+        <div class="flow-step-title">🔄 Sprint Retrospective</div>
+        <div class="flow-step-desc">Evaluasi what went well, what to improve. Action items untuk sprint berikutnya.
+        </div>
+        <div class="flow-arrow">→</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">06</div>
+        <div class="flow-step-title">✅ Increment Release</div>
+        <div class="flow-step-desc">Deploy ke staging/production. Update dokumentasi. Mulai siklus sprint baru.</div>
+      </div>
+    </div>
+
+    <!-- Daily Scrum Detail -->
+    <div
+      style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px;">
+      <div style="font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;">☀️
+        <span>Daily Scrum — 3 Pertanyaan Utama (15 menit, setiap hari pukul 09:00)</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+        <div style="background:var(--surface3);border-radius:8px;padding:14px 16px;">
+          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px;">① Kemarin</div>
+          <div style="font-size:12px;color:var(--text2);">Apa yang sudah saya selesaikan kemarin yang berkontribusi pada
+            Sprint Goal?</div>
+        </div>
+        <div style="background:var(--surface3);border-radius:8px;padding:14px 16px;">
+          <div style="font-size:12px;font-weight:700;color:var(--accent3);margin-bottom:6px;">② Hari Ini</div>
+          <div style="font-size:12px;color:var(--text2);">Apa yang akan saya kerjakan hari ini untuk mencapai Sprint
+            Goal?</div>
+        </div>
+        <div style="background:var(--surface3);border-radius:8px;padding:14px 16px;">
+          <div style="font-size:12px;font-weight:700;color:var(--accent5);margin-bottom:6px;">③ Hambatan</div>
+          <div style="font-size:12px;color:var(--text2);">Apakah ada hambatan (impediment) yang menghalangi pencapaian
+            Sprint Goal?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CEREMONIES -->
+  <div class="section" id="ceremonies">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Scrum <span class="hi">Ceremonies</span></h2>
+    </div>
+    <p class="section-desc">5 event utama Scrum yang dilaksanakan secara konsisten setiap sprint. Masing-masing memiliki
+      tujuan, durasi, dan peserta yang terdefinisi.</p>
+    <div class="ceremony-timeline">
+      <div class="ceremony-item">
+        <div class="ceremony-dot" style="border-color:var(--accent4)">🗓️</div>
+        <div class="ceremony-content">
+          <div class="ceremony-title">Sprint Planning</div>
+          <div class="ceremony-meta">Awal Sprint · Max 4 jam · Seluruh Scrum Team</div>
+          <div class="ceremony-desc">PO mempresentasikan prioritas backlog. Tim berdiskusi kapasitas dan memilih stories
+            untuk Sprint. SM memfasilitasi diskusi Sprint Goal. Dev team breakdown stories menjadi tasks teknis dan
+            memberikan komitmen.</div>
+          <div class="ceremony-tags">
+            <span class="ctag">Sprint Goal</span>
+            <span class="ctag">Sprint Backlog</span>
+            <span class="ctag">Task Breakdown</span>
+            <span class="ctag">Kapasitas Tim</span>
+          </div>
+        </div>
+      </div>
+      <div class="ceremony-item">
+        <div class="ceremony-dot" style="border-color:var(--accent)">☀️</div>
+        <div class="ceremony-content">
+          <div class="ceremony-title">Daily Scrum (Stand-up)</div>
+          <div class="ceremony-meta">Setiap hari · Max 15 menit · Development Team · 09:00 WIB</div>
+          <div class="ceremony-desc">Sinkronisasi harian antar developer. Masing-masing menjawab 3 pertanyaan: apa yang
+            dikerjakan kemarin, apa yang akan dikerjakan hari ini, dan apa hambatan yang ada. Scrum Master mencatat
+            impediment untuk ditindaklanjuti.</div>
+          <div class="ceremony-tags">
+            <span class="ctag">Sinkronisasi</span>
+            <span class="ctag">Impediment</span>
+            <span class="ctag">Progress Update</span>
+          </div>
+        </div>
+      </div>
+      <div class="ceremony-item">
+        <div class="ceremony-dot" style="border-color:var(--accent2)">🔄</div>
+        <div class="ceremony-content">
+          <div class="ceremony-title">Backlog Refinement</div>
+          <div class="ceremony-meta">Mid-Sprint · Max 2 jam · PO + Dev Team</div>
+          <div class="ceremony-desc">Sesi tengah sprint untuk mempersiapkan backlog sprint berikutnya. PO menjelaskan
+            dan mengklarifikasi user stories. Tim melakukan estimasi Planning Poker menggunakan Fibonacci. Stories yang
+            belum siap dikembalikan ke backlog.</div>
+          <div class="ceremony-tags">
+            <span class="ctag">Planning Poker</span>
+            <span class="ctag">Estimasi</span>
+            <span class="ctag">Fibonacci</span>
+            <span class="ctag">Klarifikasi</span>
+          </div>
+        </div>
+      </div>
+      <div class="ceremony-item">
+        <div class="ceremony-dot" style="border-color:var(--accent3)">🎯</div>
+        <div class="ceremony-content">
+          <div class="ceremony-title">Sprint Review</div>
+          <div class="ceremony-meta">Akhir Sprint · Max 2 jam · Semua Stakeholder</div>
+          <div class="ceremony-desc">Demo increment kepada PO dan stakeholder perusahaan. Tim mempresentasikan fitur
+            yang selesai (done per DoD). PO memberikan feedback dan acceptance. Backlog diperbarui berdasarkan hasil
+            diskusi. Tidak ada slide, hanya demo langsung.</div>
+          <div class="ceremony-tags">
+            <span class="ctag">Demo</span>
+            <span class="ctag">Acceptance</span>
+            <span class="ctag">Feedback</span>
+            <span class="ctag">Increment</span>
+          </div>
+        </div>
+      </div>
+      <div class="ceremony-item">
+        <div class="ceremony-dot" style="border-color:var(--accent5)">🔁</div>
+        <div class="ceremony-content">
+          <div class="ceremony-title">Sprint Retrospective</div>
+          <div class="ceremony-meta">Setelah Review · Max 1.5 jam · Scrum Team</div>
+          <div class="ceremony-desc">Evaluasi proses sprint menggunakan format Start/Stop/Continue. Tim mendiskusikan
+            apa yang berjalan baik, apa yang perlu dihentikan, dan apa yang perlu dimulai. Menghasilkan action items
+            konkret untuk peningkatan sprint berikutnya.</div>
+          <div class="ceremony-tags">
+            <span class="ctag">Start/Stop/Continue</span>
+            <span class="ctag">Improvement</span>
+            <span class="ctag">Action Items</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRUM ARTIFACTS -->
+  <div class="section" id="artifacts">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Scrum <span class="hi">Artifacts</span></h2>
+    </div>
+    <p class="section-desc">Tiga artefak utama Scrum ditambah commitment yang meningkatkan transparansi dan fokus tim.
+    </p>
+    <div class="artifact-grid">
+      <div class="artifact-card">
+        <div class="artifact-icon">📋</div>
+        <div class="artifact-title">Product Backlog</div>
+        <div class="artifact-desc">Daftar terurut semua yang dibutuhkan dalam produk. Dikelola oleh Product Owner Yulef
+          Dian, S.T., M.Kom.</div>
+        <ul class="artifact-items">
+          <li>35 User Stories aktif</li>
+          <li>6 Epics (Auth, Konten, Frontend, Komentar, SEO, API)</li>
+          <li>148 total story points</li>
+          <li>Prioritas: MoSCoW method</li>
+          <li>Commitment: Product Goal</li>
+        </ul>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">⚡</div>
+        <div class="artifact-title">Sprint Backlog</div>
+        <div class="artifact-desc">Subset Product Backlog yang dipilih untuk sprint saat ini, plus Sprint Goal dan
+          rencana pengerjaan.</div>
+        <ul class="artifact-items">
+          <li>Sprint Goal terdefinisi jelas</li>
+          <li>Stories dipilih berdasarkan kapasitas</li>
+          <li>Task breakdown oleh dev team</li>
+          <li>Update harian via Kanban board</li>
+          <li>Commitment: Sprint Goal</li>
+        </ul>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">✅</div>
+        <div class="artifact-title">Increment</div>
+        <div class="artifact-desc">Hasil kerja yang berpotensi shippable di akhir setiap sprint. Harus memenuhi
+          Definition of Done.</div>
+        <ul class="artifact-items">
+          <li>Fitur sudah passing semua test</li>
+          <li>Code review completed</li>
+          <li>Deploy ke staging berhasil</li>
+          <li>Dokumentasi diperbarui</li>
+          <li>Commitment: Definition of Done</li>
+        </ul>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">📊</div>
+        <div class="artifact-title">Burndown Chart</div>
+        <div class="artifact-desc">Grafik visual sisa story points vs waktu yang tersisa dalam sprint. Diupdate setiap
+          hari.</div>
+        <ul class="artifact-items">
+          <li>Ideal line vs actual line</li>
+          <li>Update harian oleh SM</li>
+          <li>Deteksi dini scope creep</li>
+          <li>Dasar keputusan re-scope</li>
+        </ul>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">🏃</div>
+        <div class="artifact-title">Sprint Board (Kanban)</div>
+        <div class="artifact-desc">Board visual dengan kolom: To Do → In Progress → Code Review → Done. Diupdate
+          real-time.</div>
+        <ul class="artifact-items">
+          <li>Todo / In Progress / Review / Done</li>
+          <li>WIP limit: max 2 item per dev</li>
+          <li>Swimlane per epic/komponen</li>
+          <li>Link ke task & commit Git</li>
+        </ul>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">📈</div>
+        <div class="artifact-title">Velocity Chart</div>
+        <div class="artifact-desc">Historis SP yang berhasil diselesaikan per sprint. Digunakan untuk capacity planning.
+        </div>
+        <ul class="artifact-items">
+          <li>Target: 18–22 SP/sprint</li>
+          <li>Forecast release date</li>
+          <li>Dasar sprint planning</li>
+          <li>Track team improvement</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPRINTS -->
+  <div class="section" id="sprints">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Sprint <span class="hi">Plan</span></h2>
+    </div>
+    <p class="section-desc">8 Sprint dengan durasi 2 minggu per sprint (total 16 minggu / ±4 bulan). Klik sprint untuk
+      melihat detail stories.</p>
+    <div class="sprint-grid">
+      <!-- Sprint 1 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(38,201,158,.15);color:var(--accent3)">S-01</div>
+          <div class="sprint-info">
+            <div class="sprint-title">Foundation & Auth Setup</div>
+            <div class="sprint-date">Minggu 1–2</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">21 SP</span>
+            <span class="sprint-status status-done">Done</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: Setup project CI4, database schema, authentication lengkap</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-001 · Login dengan CI Shield (3 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-002 · Register & email verification (5
+              SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-003 · Reset password via email (3 SP)
+            </li>
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-004 · Role management (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-005 · Route protection CI Shield (5 SP)
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Sprint 2 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(38,201,158,.15);color:var(--accent3)">S-02</div>
+          <div class="sprint-info">
+            <div class="sprint-title">Admin Dashboard & User Mgmt</div>
+            <div class="sprint-date">Minggu 3–4</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">18 SP</span>
+            <span class="sprint-status status-done">Done</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: Dashboard AdminLTE3 terintegrasi, CRUD user selesai</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-033 · Dashboard statistik ringkasan (3
+              SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-034 · Grafik artikel per bulan (3 SP)
+            </li>
+            <li class="sprint-story"><span class="story-dot dot-done"></span>TASK · Setup AdminLTE3 layout + nav (5 SP)
+            </li>
+            <li class="sprint-story"><span class="story-dot dot-done"></span>TASK · CRUD User (Admin, Editor, Author,
+              Viewer) (7 SP)</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Sprint 3 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(79,142,247,.15);color:var(--accent)">S-03</div>
+          <div class="sprint-info">
+            <div class="sprint-title">Manajemen Artikel — Core</div>
+            <div class="sprint-date">Minggu 5–6</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">21 SP</span>
+            <span class="sprint-status status-active">Active</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: CRUD artikel dengan rich text editor, draft & publish</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-done"></span>US-006 · Buat artikel rich text (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-inprog"></span>US-007 · Simpan draft (3 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-inprog"></span>US-008 · Edit & publish oleh editor (5
+              SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-010 · Kategori bersarang (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-011 · Tag dengan autocomplete (3 SP)
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Sprint 4 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(92,100,120,.1);color:var(--text3)">S-04</div>
+          <div class="sprint-info">
+            <div class="sprint-title">Artikel Lanjutan & Media</div>
+            <div class="sprint-date">Minggu 7–8</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">21 SP</span>
+            <span class="sprint-status status-planned">Planned</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: Scheduled publish, thumbnail, media manager, revisi artikel</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-009 · Scheduled publish (8 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-012 · Upload thumbnail (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-029 · Media manager (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-013 · Revisi artikel (8 SP) — partial
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Sprint 5 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(92,100,120,.1);color:var(--text3)">S-05</div>
+          <div class="sprint-info">
+            <div class="sprint-title">Frontend Public Blog</div>
+            <div class="sprint-date">Minggu 9–10</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">21 SP</span>
+            <span class="sprint-status status-planned">Planned</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: Homepage, detail artikel, search, filter, responsive</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-014 · Homepage listing (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-015 · Detail artikel (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-016 · Search artikel (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-019 · Responsive mobile (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-021 · Artikel terkait sidebar (2 SP)
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Sprint 6 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(92,100,120,.1);color:var(--text3)">S-06</div>
+          <div class="sprint-info">
+            <div class="sprint-title">Frontend Lanjutan & Komentar</div>
+            <div class="sprint-date">Minggu 11–12</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">22 SP</span>
+            <span class="sprint-status status-planned">Planned</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: Halaman statis, newsletter, sistem komentar lengkap</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-017 · Filter kategori & tag (3 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-018 · Halaman About & Contact (3 SP)
+            </li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-020 · Newsletter subscribe (3 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-022 · Komentar publik (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-023 · Moderasi komentar (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-024 · Nested reply (3 SP)</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Sprint 7 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(92,100,120,.1);color:var(--text3)">S-07</div>
+          <div class="sprint-info">
+            <div class="sprint-title">SEO, Pengaturan & Notifikasi</div>
+            <div class="sprint-date">Minggu 13–14</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">22 SP</span>
+            <span class="sprint-status status-planned">Planned</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: SEO lengkap, pengaturan sistem, notifikasi email, API REST</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-025 · Notifikasi email komentar (3 SP)
+            </li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-026 · Filter spam komentar (3 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-027 · Meta title & description (3 SP)
+            </li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-028 · Sitemap XML otomatis (5 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-030 · Pengaturan sistem & SMTP (5 SP)
+            </li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-035 · REST API artikel (5 SP) — partial
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Sprint 8 -->
+      <div class="sprint-card">
+        <div class="sprint-head" onclick="toggleSprint(this)">
+          <div class="sprint-badge" style="background:rgba(92,100,120,.1);color:var(--text3)">S-08</div>
+          <div class="sprint-info">
+            <div class="sprint-title">Finishing, Testing & Deployment</div>
+            <div class="sprint-date">Minggu 15–16</div>
+          </div>
+          <div class="sprint-meta">
+            <span class="sprint-sp-badge">8 SP</span>
+            <span class="sprint-status status-planned">Planned</span>
+          </div>
+        </div>
+        <div class="sprint-body">
+          <div
+            style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">
+            SPRINT GOAL: Semua fitur selesai, bug fix, deploy production</div>
+          <ul class="sprint-stories">
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-031 · Maintenance mode (3 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>US-032 · Backup database (3 SP)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>TASK · UAT & Bug Fixing (buffer)</li>
+            <li class="sprint-story"><span class="story-dot dot-todo"></span>TASK · Deploy production + dokumentasi (2
+              SP)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KANBAN -->
+  <div class="section" id="kanban">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2>Sprint Board — <span class="hi">Sprint 3</span></h2>
+    </div>
+    <p class="section-desc">Simulasi Kanban board untuk Sprint 3 aktif saat ini. Setiap kartu menampilkan story ID,
+      deskripsi, assignee, dan story points.</p>
+    <div class="kanban">
+      <div class="kanban-col col-todo">
+        <div class="kanban-head">
+          <span class="kanban-col-title">📋 To Do</span>
+          <span class="kanban-count">3</span>
+        </div>
+        <div class="kanban-body">
+          <div class="kanban-item">
+            <div class="kanban-item-id">US-010</div>
+            <div class="kanban-item-title">Buat & kelola kategori bersarang (parent-child)</div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Deni K.</span>
+              <span class="kanban-sp sp-5">5 SP</span>
+            </div>
+          </div>
+          <div class="kanban-item">
+            <div class="kanban-item-id">US-011</div>
+            <div class="kanban-item-title">Tambah tag ke artikel dengan autocomplete</div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Budi S.</span>
+              <span class="kanban-sp sp-3">3 SP</span>
+            </div>
+          </div>
+          <div class="kanban-item">
+            <div class="kanban-item-id">TASK-019</div>
+            <div class="kanban-item-title">Setup TinyMCE integration & konfigurasi upload</div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Sari D.</span>
+              <span class="kanban-sp sp-2">2 SP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kanban-col col-inprog">
+        <div class="kanban-head">
+          <span class="kanban-col-title">⚡ In Progress</span>
+          <span class="kanban-count">2</span>
+        </div>
+        <div class="kanban-body">
+          <div class="kanban-item">
+            <div class="kanban-item-id">US-007</div>
+            <div class="kanban-item-title">Simpan artikel sebagai Draft sebelum publish</div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Deni K.</span>
+              <span class="kanban-sp sp-3">3 SP</span>
+            </div>
+          </div>
+          <div class="kanban-item">
+            <div class="kanban-item-id">US-008</div>
+            <div class="kanban-item-title">Edit & publish artikel oleh Editor</div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Budi S.</span>
+              <span class="kanban-sp sp-5">5 SP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kanban-col col-review">
+        <div class="kanban-head">
+          <span class="kanban-col-title">🔍 Code Review</span>
+          <span class="kanban-count">1</span>
+        </div>
+        <div class="kanban-body">
+          <div class="kanban-item">
+            <div class="kanban-item-id">US-006</div>
+            <div class="kanban-item-title">Buat artikel baru dengan rich text editor (TinyMCE)</div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Sari D.</span>
+              <span class="kanban-sp sp-5">5 SP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kanban-col col-done">
+        <div class="kanban-head">
+          <span class="kanban-col-title">✅ Done</span>
+          <span class="kanban-count">2</span>
+        </div>
+        <div class="kanban-body">
+          <div class="kanban-item" style="opacity:0.7">
+            <div class="kanban-item-id">TASK-015</div>
+            <div class="kanban-item-title" style="text-decoration:line-through">Setup model Artikel + migration schema
+            </div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Deni K.</span>
+              <span class="kanban-sp sp-2">2 SP</span>
+            </div>
+          </div>
+          <div class="kanban-item" style="opacity:0.7">
+            <div class="kanban-item-id">TASK-016</div>
+            <div class="kanban-item-title" style="text-decoration:line-through">Design wireframe halaman artikel admin
+            </div>
+            <div class="kanban-item-footer">
+              <span class="assignee">👤 Rina O.</span>
+              <span class="kanban-sp sp-2">2 SP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOD -->
+  <div class="section" id="dod">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2>Definition of <span class="hi">Done</span></h2>
+    </div>
+    <p class="section-desc">Checklist yang harus terpenuhi sebelum sebuah user story dinyatakan "Done". Klik item untuk
+      toggle. Semua kriteria wajib ✅ sebelum sprint review.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px;">
+      <div>
+        <div
+          style="font-size:12px;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">
+          📝 Coding & Development</div>
+        <div class="dod-list">
+          <div class="dod-item checked" onclick="toggleDod(this)">
+            <div class="dod-check">✓</div><span class="dod-text">Kode mengikuti PSR-12 coding standard</span>
+          </div>
+          <div class="dod-item checked" onclick="toggleDod(this)">
+            <div class="dod-check">✓</div><span class="dod-text">Semua function memiliki komentar PHPDoc</span>
+          </div>
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">Tidak ada error / warning di log CI4</span>
+          </div>
+          <div class="dod-item checked" onclick="toggleDod(this)">
+            <div class="dod-check">✓</div><span class="dod-text">Migration database berhasil dijalankan</span>
+          </div>
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">Input validation menggunakan CI4 Validation rules</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          style="font-size:12px;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">
+          🔍 Testing & QA</div>
+        <div class="dod-list">
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">Unit test ditulis & passing (PHPUnit)</span>
+          </div>
+          <div class="dod-item checked" onclick="toggleDod(this)">
+            <div class="dod-check">✓</div><span class="dod-text">Manual testing semua acceptance criteria selesai</span>
+          </div>
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">API endpoint di-test dengan Postman</span>
+          </div>
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">Cross-browser test (Chrome, Firefox, Edge)</span>
+          </div>
+          <div class="dod-item checked" onclick="toggleDod(this)">
+            <div class="dod-check">✓</div><span class="dod-text">Mobile responsive test selesai</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          style="font-size:12px;font-weight:700;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">
+          🚀 Deployment & Review</div>
+        <div class="dod-list">
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">Code review dilakukan oleh 1 developer lain</span>
+          </div>
+          <div class="dod-item checked" onclick="toggleDod(this)">
+            <div class="dod-check">✓</div><span class="dod-text">Pull request merged ke branch develop</span>
+          </div>
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">Deploy ke staging environment berhasil</span>
+          </div>
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">PO memberikan acceptance pada Sprint Review</span>
+          </div>
+          <div class="dod-item" onclick="toggleDod(this)">
+            <div class="dod-check"></div><span class="dod-text">User manual / dokumentasi diperbarui</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VELOCITY & BURNDOWN -->
+  <div class="section" id="velocity">
+    <div class="section-header">
+      <span class="section-num">11</span>
+      <h2>Velocity & <span class="hi">Burndown</span></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+      <!-- Velocity -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px;">📈 Velocity Chart</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:20px;">Story points completed per sprint. Target:
+          18–22 SP/sprint</div>
+        <div class="vel-target" style="height:0;margin-bottom:0;position:relative;padding-bottom:130px;">
+          <div class="vel-target-label" style="top:6px;right:4px">Target: 20 SP</div>
+          <div
+            style="position:absolute;left:0;right:0;bottom:0;display:flex;align-items:flex-end;gap:8px;height:120px;">
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:95%;background:var(--accent3);">
+                <div class="vel-bar-val">21</div>
+              </div>
+              <div class="vel-label">S1</div>
+            </div>
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:90%;background:var(--accent3);">
+                <div class="vel-bar-val">18</div>
+              </div>
+              <div class="vel-label">S2</div>
+            </div>
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:60%;background:var(--accent);">
+                <div class="vel-bar-val">12*</div>
+              </div>
+              <div class="vel-label">S3</div>
+            </div>
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:30%;background:var(--border2);opacity:0.4;">
+                <div class="vel-bar-val">—</div>
+              </div>
+              <div class="vel-label">S4</div>
+            </div>
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:30%;background:var(--border2);opacity:0.4;"></div>
+              <div class="vel-label">S5</div>
+            </div>
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:30%;background:var(--border2);opacity:0.4;"></div>
+              <div class="vel-label">S6</div>
+            </div>
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:30%;background:var(--border2);opacity:0.4;"></div>
+              <div class="vel-label">S7</div>
+            </div>
+            <div class="vel-bar-wrap">
+              <div class="vel-bar" style="height:30%;background:var(--border2);opacity:0.4;"></div>
+              <div class="vel-label">S8</div>
+            </div>
+          </div>
+          <div style="position:absolute;left:0;right:0;top:12px;border-top:2px dashed rgba(79,142,247,0.3);"></div>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:8px;">* S3 masih berjalan — partial completed</div>
+      </div>
+      <!-- Burndown -->
+      <div class="burndown-wrap">
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px;">📉 Burndown Chart — Sprint 3</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Sisa SP vs ideal. Total SP Sprint 3: 21</div>
+        <svg class="bd-svg" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+          <!-- Grid -->
+          <line x1="30" y1="10" x2="30" y2="130" stroke="#252b38" stroke-width="1" />
+          <line x1="30" y1="130" x2="290" y2="130" stroke="#252b38" stroke-width="1" />
+          <line x1="30" y1="10" x2="290" y2="10" stroke="#252b38" stroke-width="0.5" stroke-dasharray="3,3" />
+          <line x1="30" y1="50" x2="290" y2="50" stroke="#252b38" stroke-width="0.5" stroke-dasharray="3,3" />
+          <line x1="30" y1="90" x2="290" y2="90" stroke="#252b38" stroke-width="0.5" stroke-dasharray="3,3" />
+          <!-- Labels Y -->
+          <text x="24" y="13" fill="#5c6478" font-size="7" text-anchor="end">21</text>
+          <text x="24" y="53" fill="#5c6478" font-size="7" text-anchor="end">14</text>
+          <text x="24" y="93" fill="#5c6478" font-size="7" text-anchor="end">7</text>
+          <text x="24" y="133" fill="#5c6478" font-size="7" text-anchor="end">0</text>
+          <!-- Labels X -->
+          <text x="30" y="142" fill="#5c6478" font-size="7" text-anchor="middle">D1</text>
+          <text x="83" y="142" fill="#5c6478" font-size="7" text-anchor="middle">D4</text>
+          <text x="136" y="142" fill="#5c6478" font-size="7" text-anchor="middle">D7</text>
+          <text x="189" y="142" fill="#5c6478" font-size="7" text-anchor="middle">D8</text>
+          <text x="242" y="142" fill="#5c6478" font-size="7" text-anchor="middle">D11</text>
+          <text x="290" y="142" fill="#5c6478" font-size="7" text-anchor="middle">D14</text>
+          <!-- Ideal line -->
+          <line x1="30" y1="10" x2="290" y2="130" stroke="#4f8ef7" stroke-width="1.5" stroke-dasharray="5,3"
+            opacity="0.5" />
+          <!-- Actual line -->
+          <polyline points="30,10 83,34 136,52 189,65" fill="none" stroke="#26c99e" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <!-- Actual dots -->
+          <circle cx="30" cy="10" r="3" fill="#26c99e" />
+          <circle cx="83" cy="34" r="3" fill="#26c99e" />
+          <circle cx="136" cy="52" r="3" fill="#26c99e" />
+          <circle cx="189" cy="65" r="3" fill="#26c99e" />
+          <!-- Forecast -->
+          <polyline points="189,65 290,130" fill="none" stroke="#26c99e" stroke-width="1.5" stroke-dasharray="4,3"
+            opacity="0.5" />
+        </svg>
+        <div class="bd-legend">
+          <div class="bd-legend-item">
+            <div class="bd-dot" style="background:var(--accent);opacity:0.5"></div> Ideal
+          </div>
+          <div class="bd-legend-item">
+            <div class="bd-dot" style="background:var(--accent3)"></div> Actual
+          </div>
+          <div class="bd-legend-item">
+            <div class="bd-dot" style="background:var(--accent3);opacity:0.4"></div> Forecast
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK REGISTER -->
+  <div class="section" id="risk">
+    <div class="section-header">
+      <span class="section-num">12</span>
+      <h2>Risk <span class="hi">Register</span></h2>
+    </div>
+    <p class="section-desc">Identifikasi risiko proyek berikut dampak, kemungkinan, dan strategi mitigasi.</p>
+    <div style="overflow-x:auto;border-radius:10px;border:1px solid var(--border);">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Risiko</th>
+            <th>Dampak</th>
+            <th>Level</th>
+            <th>Mitigasi</th>
+            <th>Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">R-01</span></td>
+            <td>CI Shield tidak kompatibel dengan custom permission flow</td>
+            <td>Blokir fitur autentikasi seluruhnya</td>
+            <td><span class="risk-level risk-high">Tinggi</span></td>
+            <td>PoC di sprint 1, siapkan fallback custom auth middleware</td>
+            <td>Deni K.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">R-02</span></td>
+            <td>Scope creep permintaan fitur baru dari stakeholder</td>
+            <td>Delay deliverable, overload sprint</td>
+            <td><span class="risk-level risk-high">Tinggi</span></td>
+            <td>Semua permintaan melalui PO, masuk backlog, tidak langsung ke sprint</td>
+            <td>Yulef (PO)</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">R-03</span></td>
+            <td>Developer sakit / tidak tersedia mid-sprint</td>
+            <td>Velocity turun drastis</td>
+            <td><span class="risk-level risk-med">Sedang</span></td>
+            <td>Buffer 20% kapasitas, knowledge sharing pair programming</td>
+            <td>Ahmad (SM)</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">R-04</span></td>
+            <td>Performa lambat pada artikel dengan banyak komentar</td>
+            <td>UX buruk di halaman publik</td>
+            <td><span class="risk-level risk-med">Sedang</span></td>
+            <td>Implementasi pagination, CI4 cache layer, lazy loading komentar</td>
+            <td>Deni K.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">R-05</span></td>
+            <td>Keamanan — SQL injection / XSS pada form komentar</td>
+            <td>Data breach, defacement</td>
+            <td><span class="risk-level risk-high">Tinggi</span></td>
+            <td>CI4 Query Builder, htmlspecialchars, CSRF token, security audit sprint 8</td>
+            <td>Sari D.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">R-06</span></td>
+            <td>Desain UI tidak sesuai ekspektasi PO setelah coding</td>
+            <td>Revisi besar, tambah sprint</td>
+            <td><span class="risk-level risk-med">Sedang</span></td>
+            <td>Wireframe + UI mockup disetujui PO sebelum coding dimulai</td>
+            <td>Rina O.</td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3)">R-07</span></td>
+            <td>Upload gambar thumbnail overload server storage</td>
+            <td>Server disk penuh, down</td>
+            <td><span class="risk-level risk-low">Rendah</span></td>
+            <td>Implementasi resize & compress otomatis, batasan ukuran upload 2MB</td>
+            <td>Budi S.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section" id="roadmap">
+    <div class="section-header">
+      <span class="section-num">13</span>
+      <h2>Release <span class="hi">Roadmap</span></h2>
+    </div>
+    <p class="section-desc">4 fase release dari Alpha hingga Production v1.0. Total durasi 16 minggu (4 bulan). Klik
+      fase untuk melihat deliverable.</p>
+    <div class="roadmap">
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-head" onclick="toggleRoadmap(this)">
+          <div class="roadmap-num" style="background:rgba(240,92,92,.12);color:var(--accent5)">1</div>
+          <div class="roadmap-phase-title">Alpha v0.1 — Foundation & Auth</div>
+          <div class="roadmap-duration">Sprint 1–2 · Minggu 1–4</div>
+          <div style="color:var(--text3);font-size:12px;margin-left:auto;">▶</div>
+        </div>
+        <div class="roadmap-body">
+          <ul class="roadmap-deliverables">
+            <li>Project setup CI4 + CI Shield terkonfigurasi</li>
+            <li>Database migration & seeder data awal</li>
+            <li>Login, register, email verification, reset password</li>
+            <li>Role management (Admin, Editor, Author, Viewer)</li>
+            <li>Dashboard AdminLTE3 + statistik dasar</li>
+            <li>CRUD User Management</li>
+            <li>CI/CD pipeline ke staging</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-head" onclick="toggleRoadmap(this)">
+          <div class="roadmap-num" style="background:rgba(240,168,68,.12);color:var(--accent4)">2</div>
+          <div class="roadmap-phase-title">Beta v0.2 — Content Management System</div>
+          <div class="roadmap-duration">Sprint 3–5 · Minggu 5–10</div>
+          <div style="color:var(--text3);font-size:12px;margin-left:auto;">▶</div>
+        </div>
+        <div class="roadmap-body">
+          <ul class="roadmap-deliverables">
+            <li>CRUD Artikel dengan TinyMCE / Quill editor</li>
+            <li>Draft, publish, scheduled publish</li>
+            <li>Kategori bersarang & tag dengan autocomplete</li>
+            <li>Upload thumbnail + resize otomatis</li>
+            <li>Media Manager</li>
+            <li>Riwayat revisi artikel</li>
+            <li>Frontend homepage & detail artikel (public)</li>
+            <li>Search artikel & filter kategori</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-head" onclick="toggleRoadmap(this)">
+          <div class="roadmap-num" style="background:rgba(79,142,247,.12);color:var(--accent)">3</div>
+          <div class="roadmap-phase-title">RC v0.9 — Interaksi, SEO & Pengaturan</div>
+          <div class="roadmap-duration">Sprint 6–7 · Minggu 11–14</div>
+          <div style="color:var(--text3);font-size:12px;margin-left:auto;">▶</div>
+        </div>
+        <div class="roadmap-body">
+          <ul class="roadmap-deliverables">
+            <li>Sistem komentar (submit, moderasi, nested reply)</li>
+            <li>Filter spam komentar & notifikasi email</li>
+            <li>Newsletter subscription</li>
+            <li>SEO Manager (meta, OG, sitemap.xml, canonical)</li>
+            <li>Pengaturan sistem & konfigurasi SMTP</li>
+            <li>Halaman statis (About, Contact)</li>
+            <li>REST API publik (artikel listing + detail)</li>
+            <li>UAT bersama stakeholder</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-phase-head" onclick="toggleRoadmap(this)">
+          <div class="roadmap-num" style="background:rgba(38,201,158,.12);color:var(--accent3)">4</div>
+          <div class="roadmap-phase-title">Production v1.0 — Hardening & Go-Live</div>
+          <div class="roadmap-duration">Sprint 8 · Minggu 15–16</div>
+          <div style="color:var(--text3);font-size:12px;margin-left:auto;">▶</div>
+        </div>
+        <div class="roadmap-body">
+          <ul class="roadmap-deliverables">
+            <li>Security hardening & penetration test dasar</li>
+            <li>Performance optimization (cache, query, CDN)</li>
+            <li>Maintenance mode & backup database</li>
+            <li>Final bug fixing dari UAT</li>
+            <li>Dokumentasi teknis & user manual lengkap</li>
+            <li>Deploy ke server production</li>
+            <li>Go-live & monitoring post-launch</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary bar -->
+    <div
+      style="margin-top:32px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:14px;">⏱️ Timeline Visual — 16 Minggu
+      </div>
+      <div style="display:flex;gap:3px;height:28px;border-radius:6px;overflow:hidden;">
+        <div
+          style="flex:2;background:rgba(240,92,92,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent5)">
+          S1–S2 · Alpha</div>
+        <div
+          style="flex:3;background:rgba(240,168,68,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent4)">
+          S3–S5 · Beta</div>
+        <div
+          style="flex:2;background:rgba(79,142,247,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent)">
+          S6–S7 · RC</div>
+        <div
+          style="flex:1;background:rgba(38,201,158,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--accent3)">
+          S8 · Prod</div>
+      </div>
+      <div style="display:flex;gap:3px;height:18px;margin-top:4px;">
+        <div style="flex:2;font-size:9px;color:var(--text3);text-align:center">Minggu 1–4</div>
+        <div style="flex:3;font-size:9px;color:var(--text3);text-align:center">Minggu 5–10</div>
+        <div style="flex:2;font-size:9px;color:var(--text3);text-align:center">Minggu 11–14</div>
+        <div style="flex:1;font-size:9px;color:var(--text3);text-align:center">Minggu 15–16</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Web Blog Perusahaan — CI4 + Shield + AdminLTE3</strong><br>
+    Product Owner: <strong>Yulef Dian, S.T., M.Kom.</strong> · Scrum Framework · 8 Sprint · 16 Minggu · 148 Story
+    Points<br>
+    <span style="color:var(--text3)">Scrum Documentation Dashboard · Generated for Development Team</span>
+  </footer>
+
+  <script>
+    // Epic toggle
+    function toggleEpic(header) {
+      const body = header.nextElementSibling;
+      const toggle = header.querySelector('.epic-toggle');
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      toggle.classList.toggle('open', !isOpen);
+    }
+
+    // Sprint toggle
+    function toggleSprint(header) {
+      const body = header.nextElementSibling;
+      body.classList.toggle('open');
+    }
+
+    // DoD toggle
+    function toggleDod(item) {
+      item.classList.toggle('checked');
+    }
+
+    // Roadmap toggle
+    function toggleRoadmap(header) {
+      const body = header.nextElementSibling;
+      const arrow = header.querySelector('div:last-child');
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      arrow.textContent = isOpen ? '▶' : '▼';
+    }
+
+    // Nav active on scroll
+    const sections = document.querySelectorAll('.section, .hero');
+    const navLinks = document.querySelectorAll('.nav-tabs a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 80) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    });
+
+    // Auto-open first epic
+    document.querySelector('.epic-header').click();
+    document.querySelector('.sprint-head').click();
+    document.querySelector('.roadmap-phase-head').click();
+  </script>
+</body>
+
+</html>
